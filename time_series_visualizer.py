@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+plt.style.use('default')
 import pandas as pd
 import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
@@ -35,7 +36,7 @@ def draw_bar_plot():
     df_bar = df_bar.unstack()
 
     # Draw bar plot
-    fig = df_bar.plot.bar(legend=True, figsize= (8,6), ylabel= 'Average page views', xlabel= 'Year').figure
+    fig = df_bar.plot.bar(legend=True, figsize= (8,6), ylabel= 'Average Page Views', xlabel= 'Years').figure
     plt.legend(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'])
     plt.xticks(fontsize = 10)
     plt.yticks(fontsize = 10)
@@ -52,16 +53,21 @@ def draw_box_plot():
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
     # Draw box plots (using Seaborn)
-
     df_box ['month_num'] = df_box ['date'].dt.month
     df_box = df_box.sort_values('month_num')
 
-    fig, axes = plt.subplots(nrows = 1, ncols = 2, figsize = (10,5))
-    axes[0] = sns.boxplot(x = df_box['year'], y = df_box['value'], ax = axes[0])
-    axes[1] = sns.boxplot(x = df_box['year'], y = df_box['value'], ax = axes[1])
+    fig, axes = plt.subplots(nrows = 1, ncols = 2, figsize = (20,8))
+    axes[0] = sns.boxplot(x=df_box['year'], y=df_box['value'], ax=axes[0])
+    axes[1] = sns.boxplot(x=df_box['month'], y=df_box['value'], ax=axes[1])
 
+    axes[0].set_title('Year-wise Box Plot (Trend)')
+    axes[0].set_xlabel('Year')
+    axes[0].set_ylabel('Page Views')
 
-    fig = plt.subplots()
+    axes[1].set_title('Month-wise Box Plot (Seasonality)')
+    axes[1].set_xlabel('Month')
+    axes[1].set_ylabel('Page Views')
+
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
     return fig
